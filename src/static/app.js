@@ -4,6 +4,45 @@ document.addEventListener("DOMContentLoaded", () => {
   const signupForm = document.getElementById("signup-form");
   const messageDiv = document.getElementById("message");
 
+  // Função para criar o card de atividade, incluindo participantes
+  function createActivityCard(name, activity) {
+    const card = document.createElement('div');
+    card.className = 'activity-card';
+
+    const spotsLeft = activity.max_participants - activity.participants.length;
+
+    card.innerHTML = `
+      <h4>${name}</h4>
+      <p>${activity.description}</p>
+      <p><strong>Schedule:</strong> ${activity.schedule}</p>
+      <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+    `;
+
+    // Participantes
+    const participantsSection = document.createElement('div');
+    participantsSection.className = 'participants-section';
+    const participantsTitle = document.createElement('h4');
+    participantsTitle.textContent = 'Participantes';
+    participantsSection.appendChild(participantsTitle);
+    const participantsList = document.createElement('ul');
+    participantsList.className = 'participants-list';
+    if (activity.participants && activity.participants.length > 0) {
+      activity.participants.forEach(email => {
+        const li = document.createElement('li');
+        li.textContent = email;
+        participantsList.appendChild(li);
+      });
+    } else {
+      const li = document.createElement('li');
+      li.textContent = 'Nenhum participante ainda.';
+      participantsList.appendChild(li);
+    }
+    participantsSection.appendChild(participantsList);
+    card.appendChild(participantsSection);
+
+    return card;
+  }
+
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
@@ -15,18 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
-        const activityCard = document.createElement("div");
-        activityCard.className = "activity-card";
-
-        const spotsLeft = details.max_participants - details.participants.length;
-
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-        `;
-
+        const activityCard = createActivityCard(name, details);
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
