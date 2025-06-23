@@ -13,7 +13,7 @@
     </header>
 
     <main>
-      <section id="activities-container">
+      <section id="activities-container" class="activities-container">
         <h3>Available Activities</h3>
         <div id="activities-list">
           <!-- Activities will be loaded here -->
@@ -46,5 +46,37 @@
     </footer>
 
     <script src="app.js"></script>
+    <script>
+      // ...existing code...
+      function createActivityCard(name, activity) {
+        const card = document.createElement('div');
+        card.className = 'activity-card';
+        // ...existing code...
+        // Participantes
+        const participantsSection = document.createElement('div');
+        participantsSection.className = 'participants-section';
+        const participantsTitle = document.createElement('h4');
+        participantsTitle.textContent = 'Participantes';
+        participantsSection.appendChild(participantsTitle);
+        const participantsList = document.createElement('ul');
+        participantsList.className = 'participants-list';
+        if (activity.participants && activity.participants.length > 0) {
+          activity.participants.forEach(email => {
+            const li = document.createElement('li');
+            li.textContent = email;
+            participantsList.appendChild(li);
+          });
+        } else {
+          const li = document.createElement('li');
+          li.textContent = 'Nenhum participante ainda.';
+          participantsList.appendChild(li);
+        }
+        participantsSection.appendChild(participantsList);
+        card.appendChild(participantsSection);
+        // ...existing code...
+        return card;
+      }
+      // ...existing code...
+    </script>
   </body>
 </html>
